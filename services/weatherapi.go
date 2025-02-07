@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 )
 
 type WeatherAPIResponse struct {
@@ -13,7 +14,7 @@ type WeatherAPIResponse struct {
 }
 
 func GetTemperatureByCity(city string) (float64, error) {
-	apiKey := "YOUR_API_KEY"
+	apiKey := os.Getenv("WEATHER_API_KEY")
 	url := fmt.Sprintf("http://api.weatherapi.com/v1/current.json?key=%s&q=%s", apiKey, city)
 	resp, err := http.Get(url)
 	if err != nil {

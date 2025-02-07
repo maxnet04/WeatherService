@@ -1,17 +1,14 @@
 package services
 
 import (
-
-	"encodin/json"
+	"encoding/json"
 	"fmt"
 	"net/http"
-
 )
 
-
 type ViaCEPResponse struct {
-	Localiade string  `json:"localidade"`
-}	
+	Localidade string `json:"localidade"`
+}
 
 func GetCityByCEP(cep string) (string, error) {
 	url := fmt.Sprintf("https://viacep.com.br/ws/%s/json/", cep)
@@ -26,7 +23,7 @@ func GetCityByCEP(cep string) (string, error) {
 	}
 
 	var result ViaCEPResponse
-	if err = json.NewDecoder(resp.Body).Decode(&result); err !- nil {
+	if err = json.NewDecoder(resp.Body).Decode(&result); err != nil {
 		return "", err
 	}
 

@@ -5,12 +5,12 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	"github.com/maxnet04/weatherservice/services"
+	"github.com/maxnet04/WeatherService/services"
 )
 
-type WeatherRespons struct {
+type WeatherResponse struct {
 	TempC float64 `json:"temp_C"`
-	TEmpF float64 `json:"temp_F"`
+	TempF float64 `json:"temp_F"`
 	TempK float64 `json:"temp_K"`
 }
 
@@ -42,5 +42,5 @@ func GetWeather(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(weather)
+	json.NewEncoder(w).Encode(response)
 }
