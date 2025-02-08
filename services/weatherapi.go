@@ -3,6 +3,7 @@ package services
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 )
@@ -14,22 +15,36 @@ type WeatherAPIResponse struct {
 }
 
 func GetTemperatureByCity(city string) (float64, error) {
-	apiKey := os.Getenv("WEATHER_API_KEY")
-	url := fmt.Sprintf("http://api.weatherapi.com/v1/current.json?key=%s&q=%s", apiKey, city)
-	resp, err := http.Get(url)
+	apiKey := os.Getenv("WEATHERAPI_KEY")
+	if apiKey == "" {
+		return 0, fmt.Errorf("WEATHERAPI_KEY not set")
+	}
+
+	req, err := http.NewRequest("GET", "http://api.weatherapi.com/v1/current.json", nil)
 	if err != nil {
 		return 0, err
 	}
 
+	q := req.URL.Query()
+	q.Add("key", apiKey)
+	q.Add("q", city)
+	q.Add("aqi", "no")
+	req.URL.RawQuery = q.Encode()
+
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return 0, err
+	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return 0, fmt.Errorf("failed to get temperature by city: %s", resp.Status)
-
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return 0, err
 	}
 
 	var result WeatherAPIResponse
-	if err = json.NewDecoder(resp.Body).Decode(&result); err != nil {
+	err = json.Unmarshal(body, &result)
+	if err != nil {
 		return 0, err
 	}
 

@@ -19,13 +19,13 @@ func GetWeather(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	cep := vars["cep"]
 	if len(cep) != 8 {
-		http.Error(w, "CEP must have 8 digits", http.StatusUnprocessableEntity)
+		http.Error(w, "invalid zipcode", http.StatusUnprocessableEntity)
 		return
 	}
 
 	city, err := services.GetCityByCEP(cep)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusNotFound)
+		http.Error(w, "can not find zipcode", http.StatusNotFound)
 		return
 	}
 
@@ -42,5 +42,9 @@ func GetWeather(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(response)
+	//json.NewEncoder(w).Encode(response)
+	if err := json.NewEncoder(w).Encode(response); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 }
