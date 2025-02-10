@@ -77,6 +77,8 @@ URL: https://weather-service-22300579844.southamerica-east1.run.app
 
 ### Para testar
 
-`curl https://weather-service-22300579844.southamerica-east1.run.app/weather/{cep}`
+```
+curl https://weather-service-22300579844.southamerica-east1.run.app/weather/{cep}
+```
 
 Substitua pelo cep que deseja testar
