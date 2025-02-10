@@ -10,10 +10,10 @@ WeatherService/
 │   ├── weather.go
 │   ├── weather_tests.go
 │── services/
-│   ├── viacep.go
-│   ├── weatherapi.go
+│   ├── weatherService.go
 ├── main.go
-├── conf.env
+├── env
+├── docker-compose.yml
 ├── Dockerfile
 └── README.md
 ```
@@ -52,49 +52,31 @@ Como Rodar os testes
 go test ./handlers
 ```
 
-Isso executará tosos os testes na apsta handlers, incluindo o weather_test.go
+Isso executará tosos os testes na pasta handlers, incluindo o weather_test.go
 
 
 ### Dockerização
 
-Para construir e rodar o servió usando Docker:
+Para construir e rodar o serviço usando Docker:
 
-**Construa a imagem Docker:**
+### Para rodar
 
-```
-1 docker build -t weatherservice .
-```
+PAra roadr a aplicação e subir todos os serviços basta executar:
 
-**Execute o container:**
-
-```
-1 docker run -p 8080:8080 -e WHEATHERAPI_KEY=YOUR_WHEATHERAPI_KEY weatherservice
-```
+`docker compose up -d`
 
     
-### Deploy no Google Cloud
-
-**1. Autentique-se no Googlew Cloud:**
-
-```
-1 gcloud auth login
-2 gcloud config set project YOUR_PROJECT_ID
-```
-
-**2. Construa e envie a imagem Docker paraz o Google Container Registry**
-
-```
-1 docker build -t grc.io/YOU_PROJECT_ID/weatherservice .
-2 docker push grc.io/YOU_PROJECT_ID/weatherservice
-```
-
-**3 Implante no Google cloud**
-
-```
-1 gcloud run deploy weatherservice --image grc.io/YOU_PROJECT_ID/weatheerservice --plataform managed --region  YOY_REGION --allow-unauthenticated
-```
+### Url disponivel com deploy no Google Cloud Run
 
 
-Apos o deploy o Google Cloud Run fornecerá uam RUL para cessar seu serviço User essa URL para testar o serviço com diferentes CEPs.
+O deploy o Google Cloud Run fornece uma URL para cessar seu serviço Use a URL gerada para testar o serviço com diferentes CEPs.
 
-Certifique-se de substituir YOU_WHEATHERAPI_KEY, YOUR_PROJECT_ID, e YOUR_REGION pelos valores apropriados.
+
+URL: https://weather-service-22300579844.southamerica-east1.run.app
+
+
+### Para testar
+
+`curl https://weather-service-22300579844.southamerica-east1.run.app/weather/{cep}`
+
+Substitua pelo cep que deseja testar
